@@ -27,31 +27,76 @@ public class GraficoCompuesto:Grafico
 public abstract class Punto:Grafico
 {
 
-    public int x { get; private set; }
+    public int X { get; private set; }
 
-    public int y { get; private set; }
+    public int Y { get; private set; }
 
     public Punto(int x, int y)
     {
-        this.x = x;
-        this.y = y;
+        this.X = x;
+        this.Y = y;
     }
     
     public void Dibujar()
     {
-        throw new NotImplementedException();
+        Console.WriteLine("posicion x = " + X + ", posicion Y = " + Y);
     }
 
     public bool Mover(int x, int y)
     {
-        throw new NotImplementedException();
+        return x >= 0 && x <= 800 && y >= 0 && y <= 600;
     }
     
 }
 
 public class Circulo : Punto
 {
-    public Circulo(int x, int y) : base(x, y)
+    
+    public int Radio { get; private set; }
+    
+    public Circulo(int x, int y,int radio) : base(x, y)
     {
+        this.Radio = radio;
+        if (x+radio>800 || x - radio <0 || y+radio>600 || y-radio<0)
+        {
+            throw new Exception("tas pasau");
+        }
     }
+
+    public new void Dibujar()
+    {
+        Console.WriteLine("posicion x = " + X + ", posicion Y = " + Y + ", radio = " + Radio);
+    }
+
+    public new bool Mover(int x, int y)
+    {
+        return true;
+    }
+    
 }
+
+public class Rectangulo : Punto
+{
+    
+    public int Ancho { get; private set; }
+    
+    public int Alto { get; private set; }
+    
+    public Rectangulo(int x, int y,int ancho, int alto) : base(x, y)
+    {
+        this.Ancho = ancho;
+        this.Alto = alto;
+    }
+    
+    public new void Dibujar()
+    {
+        Console.WriteLine("posicion x = " + X + ", posicion Y = " + Y + ", alto = " + Alto + ", ancho = " + Ancho);
+    }
+    
+    public new bool Mover(int x, int y)
+    {
+        return true;
+    }
+    
+}
+
