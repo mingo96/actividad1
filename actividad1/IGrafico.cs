@@ -35,9 +35,12 @@ while (dato != "2")
     {
         Console.WriteLine("introduce posiciones a mover, formato x,y");
         datos = Console.ReadLine().Split(",");
-        graficoCompuesto.Mover(Int32.Parse(datos[0]), Int32.Parse(datos[1]));
-        
-        graficoCompuesto.Dibujar();
+        if(graficoCompuesto.Mover(Int32.Parse(datos[0]), Int32.Parse(datos[1])))
+            graficoCompuesto.Dibujar();
+        else
+        {
+            Console.WriteLine("error, movimientos no validos");
+        }
         
         Console.WriteLine("siguiente :\n1. Mover el grafico\n2. Salir");
         
@@ -135,13 +138,11 @@ public class Punto:IGrafico
         Console.WriteLine("posicion x = " + X + ", posicion Y = " + Y);
     }
 
-    public bool Mover(int x, int y)
+    public virtual bool Mover(int x, int y)
     {
         try
         {
             MovimientoEsValido(x+X,y+Y);
-            Console.WriteLine(x + X);
-            Console.WriteLine(Y+y);
             X += x;
             Y += y;
             return true;
@@ -154,7 +155,7 @@ public class Punto:IGrafico
 
     public virtual void MovimientoEsValido(int x, int y)
     {
-        if (x >= 0 && x <= 800 && y >= 0 && y <= 600)
+        if (x < 0 || x > 800 || y < 0 || y > 600)
         {
             throw new Exception("tas pasau");
         }
