@@ -1,6 +1,9 @@
 ﻿
 Console.WriteLine("creando un punto\nintroduce x e y de el punto separados por ,:");
 
+try
+{
+
 var datos = Console.ReadLine().Split(",");
 
 Punto punto = new Punto(Int32.Parse(datos[0]), Int32.Parse(datos[1]));
@@ -22,8 +25,7 @@ GraficoCompuesto graficoCompuesto = new GraficoCompuesto();
 graficoCompuesto.AñadirGrafico(punto);
 graficoCompuesto.AñadirGrafico(circulo);
 graficoCompuesto.AñadirGrafico(rectangulo);
-
-graficoCompuesto.Dibujar();
+Console.WriteLine(graficoCompuesto.Dibujar());
 
 Console.WriteLine("siguiente :\n1. Mover el grafico\n2. Salir");
 
@@ -36,7 +38,7 @@ while (dato != "2")
         Console.WriteLine("introduce posiciones a mover, formato x,y");
         datos = Console.ReadLine().Split(",");
         if(graficoCompuesto.Mover(Int32.Parse(datos[0]), Int32.Parse(datos[1])))
-            graficoCompuesto.Dibujar();
+            Console.WriteLine(graficoCompuesto.Dibujar());
         else
         {
             Console.WriteLine("error, movimientos no validos");
@@ -56,6 +58,11 @@ while (dato != "2")
 
 Console.WriteLine("adios");
 
+}
+catch (Exception e)
+{
+    Console.WriteLine("error en la creación de objetos");
+}
 public class EditorGrafico
 {
     public List<IGrafico> ListaGraficos = new List<IGrafico>();
@@ -69,7 +76,7 @@ public class EditorGrafico
 public interface IGrafico
 {
     public bool Mover(int x, int y);
-    public void Dibujar();
+    public String Dibujar();
 
     public void MovimientoEsValido(int x, int y);
 }
@@ -101,14 +108,16 @@ public class GraficoCompuesto:IGrafico
 
     }
 
-    public void Dibujar()
+    public String Dibujar()
     {
-        Console.WriteLine("grafico compuesto por:\n___________________");
+        var respuesta = "";
+        respuesta += "grafico compuesto por:\n___________________\n";
         foreach (var grafico in ListaGraficos)
         {
-            grafico.Dibujar();
+            respuesta += grafico.Dibujar();
         }    
-        Console.WriteLine("___________________");
+        respuesta +="___________________\n";
+        return respuesta;
     }
 
     public void MovimientoEsValido(int x, int y)
@@ -133,12 +142,12 @@ public class Punto:IGrafico
         this.Y = y;
     }
     
-    public virtual void Dibujar()
+    public virtual String Dibujar()
     {
-        Console.WriteLine("posicion x = " + X + ", posicion Y = " + Y);
+        return "posicion x = " + X + ", posicion Y = " + Y +"\n";
     }
 
-    public virtual bool Mover(int x, int y)
+    public bool Mover(int x, int y)
     {
         try
         {
@@ -174,9 +183,9 @@ public class Circulo : Punto
         
     }
 
-    public override void Dibujar()
+    public override String Dibujar()
     {
-        Console.WriteLine("posicion x = " + X + ", posicion Y = " + Y + ", radio = " + Radio);
+        return "posicion x = " + X + ", posicion Y = " + Y + ", radio = " + Radio + "\n";
     }
 
     public sealed override void MovimientoEsValido(int x, int y)
@@ -204,17 +213,15 @@ public class Rectangulo : Punto
         MovimientoEsValido(x,y);
     }
 
-    public override void Dibujar()
+    public override String Dibujar()
     {
-    Console.WriteLine("posicion x = " + X + ", posicion Y = " + Y + ", alto = " + Alto + ", ancho = " + Ancho);
+     return "posicion x = " + X + ", posicion Y = " + Y + ", alto = " + Alto + ", ancho = " + Ancho + "\n";
     }
 
     public sealed override void MovimientoEsValido(int x, int y)
     {
         if ((Ancho / 2)+x>800|| x-(Ancho / 2)<0 || (Alto / 2)+y>600|| y-(Alto / 2) <0)
         {
-            Console.WriteLine(Ancho / 2 );
-            Console.WriteLine( Alto / 2);
             throw new Exception("tas pasau");
         }
     }
